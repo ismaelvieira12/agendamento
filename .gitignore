@@ -1,0 +1,6 @@
+# Arquivos de configuração do editor/Claude Code
+.claude/
+
+# Sistema
+Thumbs.db
+.DS_Store
