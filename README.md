@@ -1,4 +1,4 @@
-# Site de Agendamento 💄
+# Gabryele Braga — Site de Agendamento 💄
 
 Site de agendamento de serviços de maquiagem e sobrancelhas (Design simples e Design com Renna).
 Feito em um único arquivo `index.html`, sem dependências externas.

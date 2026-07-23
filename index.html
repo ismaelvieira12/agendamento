@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Brenna Jeniffer • Agendamento</title>
+<title>Gabryele Braga • Agendamento</title>
 
 <!--
   ==========================================================================
@@ -35,17 +35,19 @@
   body{
     font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
     background:#d9b8e6;
-    display:flex;align-items:center;justify-content:center;
-    min-height:100vh;color:var(--texto);
+    display:flex;align-items:flex-start;justify-content:center;
+    min-height:100vh;min-height:100dvh;color:var(--texto);
   }
 
   /* Moldura de celular (some no mobile e ocupa a tela toda) */
   .phone{
-    width:100%;max-width:420px;min-height:100vh;
+    width:100%;max-width:420px;
+    min-height:100vh;min-height:100dvh;
     background:linear-gradient(180deg,#e79fd4 0%,#eec3e6 32%,#efe1f8 60%,#f6eefb 100%);
     position:relative;overflow:hidden;
     box-shadow:0 20px 60px rgba(80,20,120,.35);
   }
+  /* No celular: ocupa a tela inteira, sem bordas. No desktop: vira uma moldura de celular. */
   @media(min-width:440px){
     .phone{min-height:844px;border-radius:38px;margin:24px 0;}
   }
@@ -71,13 +73,13 @@
   .hero{text-align:center;padding:18px 20px 6px;}
   .avatar{
     width:150px;height:150px;border-radius:50%;margin:0 auto;
-    background:linear-gradient(135deg,#ffd1ef,#e6a8ff);
+    background:#efe7de;
     border:5px solid #fff;box-shadow:var(--sombra);
     display:flex;align-items:center;justify-content:center;font-size:62px;
     overflow:hidden;
   }
   .avatar img{width:100%;height:100%;object-fit:cover;}
-  .nome{font-size:26px;font-weight:700;margin-top:14px;color:#4a2b5e;}
+  .nome{font-size:clamp(22px,6.5vw,27px);font-weight:700;margin-top:14px;color:#4a2b5e;padding:0 12px;}
 
   .acoes{display:flex;justify-content:center;gap:14px;margin-top:16px;}
   .acao{
@@ -233,14 +235,14 @@
 
   <!-- Topo roxo -->
   <div class="topbar">
-    <span class="chip-perfil"><span class="mini">👑</span> Studio Brenna</span>
+    <span class="chip-perfil"><span class="mini">🤎</span> GB • Design de Sobrancelhas</span>
   </div>
 
   <!-- Perfil -->
   <div class="hero">
-    <!-- Para usar foto real: <div class="avatar"><img src="sua-foto.jpg"></div> -->
-    <div class="avatar">💄</div>
-    <div class="nome" data-nome>Brenna Jeniffer 🦋</div>
+    <!-- Para trocar a imagem: substitua o arquivo em img/logo.jpeg -->
+    <div class="avatar"><img src="img/logo.jpeg" alt="GB - Gabryele Braga Design de Sobrancelhas"></div>
+    <div class="nome" data-nome>Gabryele Braga</div>
 
     <div class="acoes">
       <a class="acao wpp" id="lnk-wpp" title="WhatsApp">
@@ -268,22 +270,22 @@
       <div class="cat-head" onclick="toggleCat(this)">Sobrancelhas <span class="seta">▾</span></div>
       <div class="cat-body">
 
-        <div class="servico" data-nome="Design simples" data-prof="Profissional Brenna" data-dur="30 min" data-preco="R$ 25,00" onclick="selecionar(this)">
+        <div class="servico" data-nome="Design simples" data-prof="Profissional Gabryele" data-dur="30 min" data-preco="R$ 25,00" onclick="selecionar(this)">
           <div class="radio"></div>
           <div class="thumb">✏️</div>
           <div class="info">
             <div class="titulo">Design simples</div>
-            <div class="prof">Profissional Brenna</div>
+            <div class="prof">Profissional Gabryele</div>
             <div class="preco">30 min · R$ 25,00</div>
           </div>
         </div>
 
-        <div class="servico" data-nome="Design com Renna" data-prof="Profissional Brenna" data-dur="45 min" data-preco="R$ 40,00" onclick="selecionar(this)">
+        <div class="servico" data-nome="Design com Renna" data-prof="Profissional Gabryele" data-dur="45 min" data-preco="R$ 40,00" onclick="selecionar(this)">
           <div class="radio"></div>
           <div class="thumb">🌿</div>
           <div class="info">
             <div class="titulo">Design com Renna</div>
-            <div class="prof">Profissional Brenna</div>
+            <div class="prof">Profissional Gabryele</div>
             <div class="preco">45 min · R$ 40,00</div>
           </div>
         </div>
@@ -295,22 +297,22 @@
       <div class="cat-head" onclick="toggleCat(this)">Maquiagem <span class="seta">▾</span></div>
       <div class="cat-body">
 
-        <div class="servico" data-nome="Maquiagem Social" data-prof="Profissional Brenna" data-dur="1 h" data-preco="R$ 90,00" onclick="selecionar(this)">
+        <div class="servico" data-nome="Maquiagem Social" data-prof="Profissional Gabryele" data-dur="1 h" data-preco="R$ 90,00" onclick="selecionar(this)">
           <div class="radio"></div>
           <div class="thumb">💄</div>
           <div class="info">
             <div class="titulo">Maquiagem Social</div>
-            <div class="prof">Profissional Brenna</div>
+            <div class="prof">Profissional Gabryele</div>
             <div class="preco">1 h · R$ 90,00</div>
           </div>
         </div>
 
-        <div class="servico" data-nome="Maquiagem Noiva" data-prof="Profissional Brenna" data-dur="1 h 30 min" data-preco="R$ 180,00" onclick="selecionar(this)">
+        <div class="servico" data-nome="Maquiagem Noiva" data-prof="Profissional Gabryele" data-dur="1 h 30 min" data-preco="R$ 180,00" onclick="selecionar(this)">
           <div class="radio"></div>
           <div class="thumb">👰</div>
           <div class="info">
             <div class="titulo">Maquiagem Noiva</div>
-            <div class="prof">Profissional Brenna</div>
+            <div class="prof">Profissional Gabryele</div>
             <div class="preco">1 h 30 min · R$ 180,00</div>
           </div>
         </div>
