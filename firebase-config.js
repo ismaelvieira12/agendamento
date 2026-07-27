@@ -1,18 +1,15 @@
 /* =========================================================================
-   CONFIGURAÇÃO DO FIREBASE
+   CONFIGURAÇÃO DO FIREBASE  —  projeto: agendamento-3403d
    -------------------------------------------------------------------------
-   Cole aqui os dados do SEU projeto Firebase.
-   Onde encontrar: Console do Firebase > (engrenagem) Configurações do projeto
-   > seus apps > App da Web > "SDK do Firebase" / "Configuração".
-
-   Enquanto os valores começarem com "COLE_", o site funciona normalmente
-   usando os valores padrão (o Firebase fica desativado).
+   Estas chaves NÃO são secretas: elas são feitas para ficar no código do
+   site. Quem protege os dados são as REGRAS do Firestore + o LOGIN.
    ========================================================================= */
 window.FIREBASE_CONFIG = {
-  apiKey: "COLE_SUA_API_KEY",
-  authDomain: "COLE_SEU_PROJECT_ID.firebaseapp.com",
-  projectId: "COLE_SEU_PROJECT_ID",
-  storageBucket: "COLE_SEU_PROJECT_ID.appspot.com",
-  messagingSenderId: "COLE_SEU_SENDER_ID",
-  appId: "COLE_SEU_APP_ID"
+  apiKey: "AIzaSyAsUKv5S0Tv0x-W_A4J6JqmrV5h_1hQdcw",
+  authDomain: "agendamento-3403d.firebaseapp.com",
+  projectId: "agendamento-3403d",
+  storageBucket: "agendamento-3403d.firebasestorage.app",
+  messagingSenderId: "859792567625",
+  appId: "1:859792567625:web:97ec32668acf7038b07e98",
+  measurementId: "G-4K1FPP87LD"
 };
