@@ -1,24 +1,38 @@
 # Gabriely Braga — Site de Agendamento 💄
 
-Site de agendamento de serviços de maquiagem e sobrancelhas (Design simples e Design com Renna).
-Feito em um único arquivo `index.html`, sem dependências externas.
+Site de agendamento de sobrancelhas (Design simples e Design com henna) com
+painel de administração para configurar tudo sem mexer no código.
 
 ## Recursos
 - Layout mobile no estilo cartão de perfil (WhatsApp, Instagram, localização, horário)
 - Lista de serviços com preço e duração
 - Pop-up de agendamento com dias e horários disponíveis
 - Confirmação enviada direto para o WhatsApp
+- **Painel admin** (`admin.html`) protegido por login para configurar número, Instagram,
+  local, serviços/valores e horários — clientes veem apenas a página pública
 
-## Como ver localmente
-Basta abrir o arquivo `index.html` no navegador.
+## Arquivos
+- `index.html` — site público (só visualização)
+- `admin.html` — painel de administração (login e senha)
+- `firebase-config.js` — chaves do projeto Firebase (você preenche)
+- `firestore.rules` — regras de segurança do banco (leitura pública, escrita só logado)
 
 ## Como publicar de graça (GitHub Pages)
 1. No GitHub, vá em **Settings → Pages**
-2. Em **Branch**, selecione `main` e a pasta `/ (root)`
-3. Salve. Em alguns minutos o site fica no ar em `https://SEU-USUARIO.github.io/NOME-DO-REPO/`
+2. Em **Branch**, selecione `main` e a pasta `/ (root)` e salve
+3. Site fica em `https://SEU-USUARIO.github.io/NOME-DO-REPO/`
+   e o painel em `.../admin.html`
 
-## Personalização
-Abra o `index.html` e edite:
-- `const CONFIG` — número do WhatsApp e @ do Instagram
-- Bloco de serviços — nomes, preços e durações
-- `const HORARIOS` — horários e dias disponíveis
+## Configurar o painel (Firebase — grátis)
+1. Crie um projeto em https://console.firebase.google.com
+2. **Firestore Database** → Criar banco (modo produção)
+3. Na aba **Regras**, cole o conteúdo de `firestore.rules` e publique
+4. **Authentication** → Sign-in method → ative **E-mail/senha**
+5. Na aba **Users**, clique em **Adicionar usuário** e crie o login da dona
+6. **Configurações do projeto** → seus apps → **App da Web** (`</>`) →
+   copie o objeto de configuração para dentro de `firebase-config.js`
+7. Pronto: acesse `admin.html`, faça login e configure. As mudanças aparecem
+   para todos os clientes automaticamente.
+
+> Enquanto o `firebase-config.js` estiver com os valores `COLE_...`, o site
+> funciona normalmente usando os valores padrão embutidos no `index.html`.

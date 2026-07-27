@@ -251,8 +251,8 @@
       <a class="acao insta" id="lnk-insta" title="Instagram">
         <svg width="23" height="23" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .4 1.4.9.5.4.7.8.9 1.4.1.4.3 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.4 1-.9 1.4-.4.5-.8.7-1.4.9-.4.1-1 .3-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4-.6-.2-1-.4-1.4-.9-.5-.4-.7-.8-.9-1.4-.1-.4-.3-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.4-1 .9-1.4.4-.5.8-.7 1.4-.9.4-.1 1-.3 2.2-.4C8.4 2.2 8.8 2.2 12 2.2M12 0C8.7 0 8.3 0 7 .1 5.7.1 4.8.3 4.1.6c-.8.3-1.4.7-2.1 1.4C1.3 2.7.9 3.3.6 4.1.3 4.8.1 5.7.1 7 0 8.3 0 8.7 0 12s0 3.7.1 5c.1 1.3.2 2.2.5 2.9.3.8.7 1.4 1.4 2.1.7.7 1.3 1.1 2.1 1.4.7.3 1.6.5 2.9.5 1.3.1 1.7.1 5 .1s3.7 0 5-.1c1.3-.1 2.2-.2 2.9-.5.8-.3 1.4-.7 2.1-1.4.7-.7 1.1-1.3 1.4-2.1.3-.7.5-1.6.5-2.9.1-1.3.1-1.7.1-5s0-3.7-.1-5c-.1-1.3-.2-2.2-.5-2.9-.3-.8-.7-1.4-1.4-2.1C21.3 1.3 20.7.9 19.9.6 19.2.3 18.3.1 17 .1 15.7 0 15.3 0 12 0z"/><path d="M12 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="18.4" cy="5.6" r="1.4"/></svg>
       </a>
-      <a class="acao" title="Localização">📍</a>
-      <a class="acao" title="Horário de funcionamento">🕐</a>
+      <a class="acao" id="lnk-local" title="Localização" target="_blank" rel="noopener">📍</a>
+      <a class="acao" id="lnk-hora" title="Horário de funcionamento">🕐</a>
     </div>
   </div>
 
@@ -262,38 +262,8 @@
     <input id="busca" type="text" placeholder="Qual o serviço procurado?" oninput="filtrar(this.value)" />
   </div>
 
-  <!-- Lista de serviços -->
-  <div class="servicos" id="lista">
-
-    <!-- SERVIÇOS: edite/adicione blocos .servico aqui. -->
-    <div class="categoria">
-      <div class="cat-head" onclick="toggleCat(this)">Sobrancelhas <span class="seta">▾</span></div>
-      <div class="cat-body">
-
-        <div class="servico" data-nome="Design simples" data-prof="Profissional Gabriely" data-dur="30 min" data-preco="R$ 20,00" onclick="selecionar(this)">
-          <div class="radio"></div>
-          <div class="thumb">✏️</div>
-          <div class="info">
-            <div class="titulo">Design simples</div>
-            <div class="prof">Profissional Gabriely</div>
-            <div class="preco">30 min · R$ 20,00</div>
-          </div>
-        </div>
-
-        <div class="servico" data-nome="Design com henna" data-prof="Profissional Gabriely" data-dur="45 min" data-preco="R$ 25,00" onclick="selecionar(this)">
-          <div class="radio"></div>
-          <div class="thumb">🌿</div>
-          <div class="info">
-            <div class="titulo">Design com henna</div>
-            <div class="prof">Profissional Gabriely</div>
-            <div class="preco">45 min · R$ 25,00</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
+  <!-- Lista de serviços (preenchida pelo JS a partir da configuração) -->
+  <div class="servicos" id="lista"></div>
 
   <!-- Barra flutuante -->
   <div class="barra-agendar" id="barra">
@@ -342,22 +312,101 @@
   </div>
 </div>
 
+<!-- Chaves do projeto Firebase (arquivo separado, fácil de editar) -->
+<script src="firebase-config.js"></script>
+
 <script>
-  /* ===================== CONFIGURAÇÃO ===================== */
-  const CONFIG = {
-    whatsapp: "5585998024170",         // <-- DDI+DDD+número, só dígitos. Ex: 55 11 91234-5678
-    instagram: "leo_vieira796",         // <-- @ do Instagram (sem o @)
+  /* ===================== PADRÕES ===================== */
+  /* Usados enquanto o Firebase não responde (ou se ainda não foi configurado).
+     Tudo isto pode ser alterado pelo painel admin.html. */
+  const DEFAULTS = {
+    nome: "Gabriely Braga",
+    whatsapp: "5585998024170",
+    instagram: "leo_vieira796",
+    local: "",                       // link do Google Maps OU endereço em texto
+    categoria: "Sobrancelhas",
+    profissional: "Profissional Gabriely",
+    servicos: [
+      { nome:"Design simples",   dur:"30 min", preco:"20,00", emoji:"✏️" },
+      { nome:"Design com henna", dur:"45 min", preco:"25,00", emoji:"🌿" }
+    ],
+    horarios: ["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"],
+    fechado: [0],                    // dias fechados (0=Dom ... 6=Sáb)
+    diasAMostrar: 14
   };
 
-  // Horários base do dia (edite à vontade)
-  const HORARIOS = ["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"];
-  // Dia da semana fechado (0=Dom, 1=Seg ... 6=Sáb). Aqui: fechado aos domingos.
-  const FECHADO = [0];
-  const DIAS_A_MOSTRAR = 14; // quantos dias adiante exibir
+  // Configuração em uso (o Firebase pode sobrescrever ao carregar)
+  let cfg = JSON.parse(JSON.stringify(DEFAULTS));
 
-  /* ===================== LINKS ===================== */
-  document.getElementById("lnk-wpp").href   = "https://wa.me/" + CONFIG.whatsapp;
-  document.getElementById("lnk-insta").href = "https://instagram.com/" + CONFIG.instagram;
+  /* ===================== APLICA A CONFIGURAÇÃO NA TELA ===================== */
+  function aplicarConfig(nova){
+    cfg = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), nova || {});
+
+    const elNome = document.querySelector(".nome");
+    if(elNome) elNome.textContent = cfg.nome;
+    document.title = cfg.nome + " • Agendamento";
+
+    document.getElementById("lnk-wpp").href   = "https://wa.me/" + cfg.whatsapp;
+    document.getElementById("lnk-insta").href = "https://instagram.com/" + cfg.instagram;
+
+    const btnLocal = document.getElementById("lnk-local");
+    const local = (cfg.local || "").trim();
+    if(local){
+      btnLocal.href = /^https?:\/\//i.test(local)
+        ? local
+        : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(local);
+      btnLocal.style.opacity = "";
+    } else {
+      btnLocal.removeAttribute("href");
+      btnLocal.style.opacity = ".5";
+    }
+
+    renderServicos();
+  }
+
+  /* ===================== RENDER DOS SERVIÇOS ===================== */
+  function renderServicos(){
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
+    const cat = document.createElement("div");
+    cat.className = "categoria";
+
+    const head = document.createElement("div");
+    head.className = "cat-head";
+    head.onclick = function(){ toggleCat(this); };
+    const label = document.createElement("span");
+    label.textContent = cfg.categoria || "Serviços";
+    const seta = document.createElement("span");
+    seta.className = "seta"; seta.textContent = "▾";
+    head.append(label, document.createTextNode(" "), seta);
+    cat.appendChild(head);
+
+    const body = document.createElement("div");
+    body.className = "cat-body";
+    (cfg.servicos || []).forEach(function(s){
+      const precoFmt = "R$ " + s.preco;
+      const div = document.createElement("div");
+      div.className = "servico";
+      div.dataset.nome  = s.nome;
+      div.dataset.prof  = cfg.profissional || "";
+      div.dataset.dur   = s.dur || "";
+      div.dataset.preco = precoFmt;
+      div.onclick = function(){ selecionar(this); };
+
+      const radio = document.createElement("div"); radio.className = "radio";
+      const thumb = document.createElement("div"); thumb.className = "thumb"; thumb.textContent = s.emoji || "💠";
+      const info  = document.createElement("div"); info.className = "info";
+      const t  = document.createElement("div"); t.className  = "titulo"; t.textContent = s.nome;
+      const p  = document.createElement("div"); p.className  = "prof";   p.textContent = cfg.profissional || "";
+      const pr = document.createElement("div"); pr.className = "preco";
+      pr.textContent = (s.dur ? s.dur + " · " : "") + precoFmt;
+      info.append(t, p, pr);
+      div.append(radio, thumb, info);
+      body.appendChild(div);
+    });
+    cat.appendChild(body);
+    lista.appendChild(cat);
+  }
 
   /* ===================== SELEÇÃO DE SERVIÇO ===================== */
   let servicoSel = null, diaSel = null, horaSel = null;
@@ -374,7 +423,7 @@
   function filtrar(txt){
     txt = txt.toLowerCase().trim();
     document.querySelectorAll(".servico").forEach(s=>{
-      const nome = s.dataset.nome.toLowerCase();
+      const nome = (s.dataset.nome||"").toLowerCase();
       s.style.display = nome.includes(txt) ? "" : "none";
     });
   }
@@ -407,11 +456,13 @@
     box.innerHTML = "";
     const hoje = new Date();
     let mostrados = 0, i = 0;
-    while(mostrados < DIAS_A_MOSTRAR && i < 40){
+    const total = cfg.diasAMostrar || 14;
+    const fechado = cfg.fechado || [];
+    while(mostrados < total && i < 60){
       const d = new Date(hoje);
       d.setDate(hoje.getDate() + i);
       i++;
-      if(FECHADO.includes(d.getDay())) continue; // pula dias fechados
+      if(fechado.includes(d.getDay())) continue; // pula dias fechados
       const el = document.createElement("div");
       el.className = "dia";
       el.innerHTML =
@@ -438,7 +489,7 @@
     const semente = data.getDate() + data.getMonth();
     const grid = document.createElement("div");
     grid.className = "horarios";
-    HORARIOS.forEach((h, idx)=>{
+    (cfg.horarios || []).forEach((h, idx)=>{
       const ocupado = ((idx + semente) % 4 === 0); // ~1 a cada 4 aparece ocupado
       const el = document.createElement("div");
       el.className = "hora" + (ocupado ? " ocupado" : "");
@@ -479,10 +530,30 @@
       "• Horário: " + horaSel + "%0A" +
       "• Valor: " + servicoSel.dataset.preco;
     document.getElementById("btn-wpp-confirma").href =
-      "https://wa.me/" + CONFIG.whatsapp + "?text=" + msg;
+      "https://wa.me/" + cfg.whatsapp + "?text=" + msg;
 
     document.getElementById("passo-agenda").style.display = "none";
     document.getElementById("passo-sucesso").style.display = "block";
+  }
+
+  /* Render inicial com os padrões (o Firebase pode atualizar em seguida) */
+  aplicarConfig(DEFAULTS);
+</script>
+
+<!-- Lê a configuração salva no Firebase e atualiza a tela (só se estiver configurado) -->
+<script type="module">
+  const fc = window.FIREBASE_CONFIG;
+  if (fc && fc.apiKey && !String(fc.apiKey).startsWith("COLE")) {
+    try {
+      const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+      const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      const app  = initializeApp(fc);
+      const db   = getFirestore(app);
+      const snap = await getDoc(doc(db, "config", "site"));
+      if (snap.exists()) window.aplicarConfig(snap.data());
+    } catch (e) {
+      console.warn("Firebase indisponível — usando configuração padrão.", e);
+    }
   }
 </script>
 </body>

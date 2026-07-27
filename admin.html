@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel • Gabriely Braga</title>
+<style>
+  :root{
+    --marrom:#9c7d6d; --marrom-esc:#6e5445; --creme:#efe4d6;
+    --texto:#46352b; --cinza:#9c897a; --linha:#e6dbcd; --verde:#25d366;
+    --erro:#c0392b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;}
+  body{background:#e9ddcd;color:var(--texto);min-height:100vh;padding:20px 14px;}
+  .wrap{max-width:520px;margin:0 auto;}
+  .card{background:#fff;border-radius:18px;box-shadow:0 12px 34px rgba(90,65,48,.18);padding:22px;}
+  h1{font-size:20px;color:var(--marrom-esc);margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+  .sub{font-size:13px;color:var(--cinza);margin-bottom:18px;}
+  label{display:block;font-size:13px;font-weight:700;color:var(--marrom-esc);margin:14px 0 6px;}
+  input[type=text],input[type=email],input[type=password],input[type=number],input[type=time]{
+    width:100%;border:2px solid var(--linha);border-radius:12px;padding:12px 14px;font-size:15px;color:var(--texto);outline:none;background:#fff;
+  }
+  input:focus{border-color:var(--marrom);}
+  .hint{font-size:12px;color:var(--cinza);margin-top:4px;}
+  .btn{width:100%;border:none;border-radius:30px;padding:15px;font-size:16px;font-weight:700;color:#fff;cursor:pointer;
+    background:linear-gradient(135deg,var(--marrom),var(--marrom-esc));box-shadow:0 8px 20px rgba(120,85,58,.4);margin-top:18px;}
+  .btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
+  .btn.sec{background:none;color:var(--marrom-esc);box-shadow:none;border:2px solid var(--linha);}
+  .btn.mini{width:auto;padding:9px 16px;font-size:14px;margin-top:0;border-radius:20px;}
+  .msg{font-size:14px;padding:10px 12px;border-radius:10px;margin-top:14px;text-align:center;display:none;}
+  .msg.ok{display:block;background:#eafaf0;color:#1a7a45;}
+  .msg.err{display:block;background:#fdecea;color:var(--erro);}
+  .hidden{display:none;}
+  .row-serv,.row-hora{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .row-serv input{padding:10px;}
+  .row-serv .emoji{width:52px;text-align:center;flex-shrink:0;}
+  .row-serv .dur{width:88px;flex-shrink:0;}
+  .row-serv .preco{width:92px;flex-shrink:0;}
+  .row-hora input{width:120px;}
+  .rm{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:none;background:#f3ebe2;color:var(--erro);font-size:16px;cursor:pointer;}
+  .add{background:none;border:2px dashed var(--linha);color:var(--marrom);border-radius:12px;padding:10px;width:100%;cursor:pointer;font-weight:700;font-size:14px;margin-top:4px;}
+  .dias-fech{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .dia-chk{display:flex;align-items:center;gap:5px;background:#f6efe6;border-radius:20px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer;}
+  .dia-chk input{width:16px;height:16px;accent-color:var(--marrom);}
+  .sec-titulo{font-size:14px;font-weight:800;color:var(--marrom-esc);margin:22px 0 8px;padding-top:16px;border-top:1px solid var(--linha);}
+  .topo-painel{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;}
+  .sair{background:none;border:none;color:var(--cinza);font-size:13px;text-decoration:underline;cursor:pointer;}
+  .aviso-config{background:#fff5e6;border:1px solid #f0d9a8;color:#8a6d1f;font-size:13px;border-radius:12px;padding:14px;margin-top:14px;line-height:1.5;}
+  a{color:var(--marrom);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== TELA DE LOGIN ===== -->
+  <div class="card" id="tela-login">
+    <h1>🔒 Painel de administração</h1>
+    <div class="sub">Acesso restrito. Faça login para configurar o site.</div>
+    <div id="aviso-firebase" class="aviso-config hidden"></div>
+    <div id="form-login">
+      <label>E-mail</label>
+      <input type="email" id="email" placeholder="seu@email.com" autocomplete="username" />
+      <label>Senha</label>
+      <input type="password" id="senha" placeholder="••••••••" autocomplete="current-password" />
+      <button class="btn" id="btn-entrar">Entrar</button>
+      <div class="msg" id="msg-login"></div>
+    </div>
+  </div>
+
+  <!-- ===== PAINEL (após login) ===== -->
+  <div class="card hidden" id="tela-painel">
+    <div class="topo-painel">
+      <h1>⚙️ Configurações</h1>
+      <button class="sair" id="btn-sair">Sair</button>
+    </div>
+    <div class="sub" id="quem">—</div>
+
+    <div class="sec-titulo">Perfil</div>
+    <label>Nome exibido</label>
+    <input type="text" id="f-nome" placeholder="Gabriely Braga" />
+    <label>Nome da profissional (aparece nos serviços)</label>
+    <input type="text" id="f-prof" placeholder="Profissional Gabriely" />
+    <label>Título da categoria</label>
+    <input type="text" id="f-categoria" placeholder="Sobrancelhas" />
+
+    <div class="sec-titulo">Contato</div>
+    <label>WhatsApp (só números: DDI+DDD+número)</label>
+    <input type="text" id="f-whatsapp" inputmode="numeric" placeholder="5585998024170" />
+    <div class="hint">Ex.: 55 (Brasil) + 85 (DDD) + número. Sem espaços ou traços.</div>
+    <label>Instagram (sem o @)</label>
+    <input type="text" id="f-instagram" placeholder="leo_vieira796" />
+    <label>Localização (link do Google Maps ou endereço)</label>
+    <input type="text" id="f-local" placeholder="https://maps.app.goo.gl/...  ou  Rua X, 123 - Cidade" />
+
+    <div class="sec-titulo">Serviços e valores</div>
+    <div id="lista-serv"></div>
+    <button class="add" id="add-serv">+ Adicionar serviço</button>
+
+    <div class="sec-titulo">Horários disponíveis</div>
+    <div id="lista-hora"></div>
+    <button class="add" id="add-hora">+ Adicionar horário</button>
+
+    <div class="sec-titulo">Dias fechados</div>
+    <div class="dias-fech" id="dias-fech"></div>
+    <label>Quantos dias adiante exibir</label>
+    <input type="number" id="f-dias" min="1" max="60" value="14" />
+
+    <button class="btn" id="btn-salvar">💾 Salvar alterações</button>
+    <div class="msg" id="msg-salvar"></div>
+  </div>
+
+  <div class="sub" style="text-align:center;margin-top:14px;">
+    <a href="index.html">← Ver o site</a>
+  </div>
+</div>
+
+<script src="firebase-config.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const SEMANA = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+  const DEFAULTS = {
+    nome:"Gabriely Braga", whatsapp:"5585998024170", instagram:"leo_vieira796", local:"",
+    categoria:"Sobrancelhas", profissional:"Profissional Gabriely",
+    servicos:[
+      {nome:"Design simples",dur:"30 min",preco:"20,00",emoji:"✏️"},
+      {nome:"Design com henna",dur:"45 min",preco:"25,00",emoji:"🌿"}
+    ],
+    horarios:["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"],
+    fechado:[0], diasAMostrar:14
+  };
+
+  const $ = id => document.getElementById(id);
+  const fc = window.FIREBASE_CONFIG;
+  const configurado = fc && fc.apiKey && !String(fc.apiKey).startsWith("COLE");
+
+  // Se o Firebase ainda não foi configurado, avisa e bloqueia o login.
+  if(!configurado){
+    $("aviso-firebase").classList.remove("hidden");
+    $("aviso-firebase").innerHTML =
+      "⚠️ <b>Firebase ainda não configurado.</b><br>Cole as chaves do seu projeto no arquivo " +
+      "<code>firebase-config.js</code> para ativar o painel. Enquanto isso, o site usa os valores padrão.";
+    $("form-login").style.display = "none";
+  }
+
+  let auth, db;
+  if(configurado){
+    const app = initializeApp(fc);
+    auth = getAuth(app);
+    db   = getFirestore(app);
+
+    onAuthStateChanged(auth, user => {
+      if(user){
+        $("tela-login").classList.add("hidden");
+        $("tela-painel").classList.remove("hidden");
+        $("quem").textContent = "Conectado como " + user.email;
+        carregar();
+      } else {
+        $("tela-painel").classList.add("hidden");
+        $("tela-login").classList.remove("hidden");
+      }
+    });
+
+    $("btn-entrar").addEventListener("click", entrar);
+    $("senha").addEventListener("keydown", e => { if(e.key==="Enter") entrar(); });
+    $("btn-sair").addEventListener("click", () => signOut(auth));
+  }
+
+  async function entrar(){
+    const msg = $("msg-login");
+    msg.className = "msg";
+    $("btn-entrar").disabled = true;
+    try{
+      await signInWithEmailAndPassword(auth, $("email").value.trim(), $("senha").value);
+    }catch(e){
+      msg.textContent = traduzErro(e.code);
+      msg.className = "msg err";
+    }finally{
+      $("btn-entrar").disabled = false;
+    }
+  }
+
+  function traduzErro(code){
+    const map = {
+      "auth/invalid-email":"E-mail inválido.",
+      "auth/user-not-found":"Usuário não encontrado.",
+      "auth/wrong-password":"Senha incorreta.",
+      "auth/invalid-credential":"E-mail ou senha incorretos.",
+      "auth/too-many-requests":"Muitas tentativas. Tente novamente mais tarde."
+    };
+    return map[code] || ("Erro ao entrar (" + (code||"desconhecido") + ").");
+  }
+
+  /* ---------- Carregar config atual nos campos ---------- */
+  async function carregar(){
+    let d = DEFAULTS;
+    try{
+      const snap = await getDoc(doc(db,"config","site"));
+      if(snap.exists()) d = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), snap.data());
+    }catch(e){ /* usa DEFAULTS */ }
+
+    $("f-nome").value = d.nome || "";
+    $("f-prof").value = d.profissional || "";
+    $("f-categoria").value = d.categoria || "";
+    $("f-whatsapp").value = d.whatsapp || "";
+    $("f-instagram").value = d.instagram || "";
+    $("f-local").value = d.local || "";
+    $("f-dias").value = d.diasAMostrar || 14;
+
+    $("lista-serv").innerHTML = "";
+    (d.servicos||[]).forEach(addServico);
+    $("lista-hora").innerHTML = "";
+    (d.horarios||[]).forEach(addHora);
+
+    const box = $("dias-fech"); box.innerHTML = "";
+    SEMANA.forEach((nome, idx) => {
+      const lb = document.createElement("label");
+      lb.className = "dia-chk";
+      const cb = document.createElement("input");
+      cb.type = "checkbox"; cb.value = idx;
+      cb.checked = (d.fechado||[]).includes(idx);
+      lb.append(cb, document.createTextNode(nome));
+      box.appendChild(lb);
+    });
+  }
+
+  /* ---------- Linhas dinâmicas de serviço ---------- */
+  function addServico(s){
+    s = s || {emoji:"💠",nome:"",dur:"",preco:""};
+    const row = document.createElement("div");
+    row.className = "row-serv";
+    row.innerHTML =
+      '<input class="emoji" maxlength="4" placeholder="✨">' +
+      '<input class="nome" placeholder="Nome do serviço">' +
+      '<input class="dur" placeholder="30 min">' +
+      '<input class="preco" placeholder="20,00">' +
+      '<button class="rm" title="Remover">✕</button>';
+    row.querySelector(".emoji").value = s.emoji || "";
+    row.querySelector(".nome").value  = s.nome || "";
+    row.querySelector(".dur").value   = s.dur || "";
+    row.querySelector(".preco").value = s.preco || "";
+    row.querySelector(".rm").addEventListener("click", () => row.remove());
+    $("lista-serv").appendChild(row);
+  }
+
+  /* ---------- Linhas dinâmicas de horário ---------- */
+  function addHora(h){
+    const row = document.createElement("div");
+    row.className = "row-hora";
+    row.innerHTML = '<input type="time">' + '<button class="rm" title="Remover">✕</button>';
+    row.querySelector("input").value = h || "";
+    row.querySelector(".rm").addEventListener("click", () => row.remove());
+    $("lista-hora").appendChild(row);
+  }
+
+  if(configurado){
+    $("add-serv").addEventListener("click", () => addServico());
+    $("add-hora").addEventListener("click", () => addHora());
+    $("btn-salvar").addEventListener("click", salvar);
+  }
+
+  /* ---------- Salvar no Firestore ---------- */
+  async function salvar(){
+    const msg = $("msg-salvar");
+    msg.className = "msg";
+    $("btn-salvar").disabled = true;
+
+    const servicos = [...document.querySelectorAll("#lista-serv .row-serv")].map(r => ({
+      emoji: r.querySelector(".emoji").value.trim() || "💠",
+      nome:  r.querySelector(".nome").value.trim(),
+      dur:   r.querySelector(".dur").value.trim(),
+      preco: r.querySelector(".preco").value.trim().replace(/^R\$\s*/i,"")
+    })).filter(s => s.nome);
+
+    const horarios = [...document.querySelectorAll("#lista-hora input")]
+      .map(i => i.value.trim()).filter(Boolean)
+      .sort();
+
+    const fechado = [...document.querySelectorAll("#dias-fech input:checked")]
+      .map(i => Number(i.value));
+
+    const dados = {
+      nome: $("f-nome").value.trim(),
+      profissional: $("f-prof").value.trim(),
+      categoria: $("f-categoria").value.trim() || "Serviços",
+      whatsapp: $("f-whatsapp").value.replace(/\D/g,""),
+      instagram: $("f-instagram").value.trim().replace(/^@/,""),
+      local: $("f-local").value.trim(),
+      servicos, horarios, fechado,
+      diasAMostrar: Number($("f-dias").value) || 14
+    };
+
+    try{
+      await setDoc(doc(db,"config","site"), dados);
+      msg.textContent = "✅ Salvo! O site já está atualizado para os clientes.";
+      msg.className = "msg ok";
+    }catch(e){
+      msg.textContent = "Erro ao salvar: " + (e.code || e.message);
+      msg.className = "msg err";
+    }finally{
+      $("btn-salvar").disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
