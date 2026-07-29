@@ -1,0 +1,13 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sobrancelha">
+  <!-- corpo da sobrancelha (arco) -->
+  <path d="M12 58 C30 45 54 39 74 42 C83 43 89 45 92 47 C86 48 80 48 72 48 C52 48 32 53 20 63 C16 63 12 62 12 58 Z"
+        fill="#6e5445"/>
+  <!-- fios finos por cima, para dar aparência de sobrancelha -->
+  <g stroke="#513c2e" stroke-width="1.7" stroke-linecap="round" fill="none" opacity=".55">
+    <path d="M25 51 q3 -6 8 -9"/>
+    <path d="M36 47 q3 -6 9 -9"/>
+    <path d="M48 44 q4 -5 10 -7"/>
+    <path d="M60 44 q4 -4 9 -5"/>
+    <path d="M71 45 q3 -3 7 -3"/>
+  </g>
+</svg>

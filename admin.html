@@ -36,6 +36,10 @@
   .row-serv .emoji{width:52px;text-align:center;flex-shrink:0;}
   .row-serv .dur{width:88px;flex-shrink:0;}
   .row-serv .preco{width:92px;flex-shrink:0;}
+  .row-serv .nome{flex:1;min-width:0;}
+  .serv-card{border:1px solid var(--linha);border-radius:12px;padding:10px;margin-bottom:10px;}
+  .serv-card .row-serv{margin-bottom:8px;}
+  .serv-card .img{width:100%;font-size:13px;padding:9px 11px;}
   .row-hora input{width:120px;}
   .rm{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:none;background:#f3ebe2;color:var(--erro);font-size:16px;cursor:pointer;}
   .add{background:none;border:2px dashed var(--linha);color:var(--marrom);border-radius:12px;padding:10px;width:100%;cursor:pointer;font-weight:700;font-size:14px;margin-top:4px;}
@@ -127,14 +131,16 @@
     nome:"Gabriely Braga", whatsapp:"5585998024170", instagram:"leo_vieira796", local:"",
     categoria:"Sobrancelhas", profissional:"Profissional Gabriely",
     servicos:[
-      {nome:"Design simples",dur:"30 min",preco:"20,00",emoji:"✏️"},
-      {nome:"Design com henna",dur:"45 min",preco:"25,00",emoji:"🌿"}
+      {nome:"Design simples",dur:"30 min",preco:"20,00",emoji:""},
+      {nome:"Design com henna",dur:"45 min",preco:"25,00",emoji:""}
     ],
     horarios:["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"],
     fechado:[0], diasAMostrar:14
   };
 
   const $ = id => document.getElementById(id);
+  // Detecta se o ícone é uma imagem (link/caminho) ou não
+  const ehImagem = v => { v=(v||"").trim(); return /^(https?:|data:image|\.?\/|img\/)/i.test(v) || /\.(png|jpe?g|svg|webp|gif|avif)(\?.*)?$/i.test(v); };
   const fc = window.FIREBASE_CONFIG;
   const configurado = fc && fc.apiKey && !String(fc.apiKey).startsWith("COLE");
 
@@ -230,21 +236,23 @@
 
   /* ---------- Linhas dinâmicas de serviço ---------- */
   function addServico(s){
-    s = s || {emoji:"💠",nome:"",dur:"",preco:""};
-    const row = document.createElement("div");
-    row.className = "row-serv";
-    row.innerHTML =
-      '<input class="emoji" maxlength="4" placeholder="✨">' +
-      '<input class="nome" placeholder="Nome do serviço">' +
-      '<input class="dur" placeholder="30 min">' +
-      '<input class="preco" placeholder="20,00">' +
-      '<button class="rm" title="Remover">✕</button>';
-    row.querySelector(".emoji").value = s.emoji || "";
-    row.querySelector(".nome").value  = s.nome || "";
-    row.querySelector(".dur").value   = s.dur || "";
-    row.querySelector(".preco").value = s.preco || "";
-    row.querySelector(".rm").addEventListener("click", () => row.remove());
-    $("lista-serv").appendChild(row);
+    s = s || {emoji:"",nome:"",dur:"",preco:""};
+    const card = document.createElement("div");
+    card.className = "serv-card";
+    card.innerHTML =
+      '<div class="row-serv">' +
+        '<input class="nome" placeholder="Nome do serviço">' +
+        '<input class="dur" placeholder="30 min">' +
+        '<input class="preco" placeholder="20,00">' +
+        '<button class="rm" title="Remover">✕</button>' +
+      '</div>' +
+      '<input class="img" placeholder="Link de uma foto (opcional) — vazio usa a imagem de sobrancelha">';
+    card.querySelector(".nome").value  = s.nome || "";
+    card.querySelector(".dur").value   = s.dur || "";
+    card.querySelector(".preco").value = s.preco || "";
+    card.querySelector(".img").value   = ehImagem(s.emoji) ? s.emoji : "";
+    card.querySelector(".rm").addEventListener("click", () => card.remove());
+    $("lista-serv").appendChild(card);
   }
 
   /* ---------- Linhas dinâmicas de horário ---------- */
@@ -269,8 +277,8 @@
     msg.className = "msg";
     $("btn-salvar").disabled = true;
 
-    const servicos = [...document.querySelectorAll("#lista-serv .row-serv")].map(r => ({
-      emoji: r.querySelector(".emoji").value.trim() || "💠",
+    const servicos = [...document.querySelectorAll("#lista-serv .serv-card")].map(r => ({
+      emoji: r.querySelector(".img").value.trim(),
       nome:  r.querySelector(".nome").value.trim(),
       dur:   r.querySelector(".dur").value.trim(),
       preco: r.querySelector(".preco").value.trim().replace(/^R\$\s*/i,"")

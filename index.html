@@ -327,8 +327,8 @@
     categoria: "Sobrancelhas",
     profissional: "Profissional Gabriely",
     servicos: [
-      { nome:"Design simples",   dur:"30 min", preco:"20,00", emoji:"✏️" },
-      { nome:"Design com henna", dur:"45 min", preco:"25,00", emoji:"🌿" }
+      { nome:"Design simples",   dur:"30 min", preco:"20,00", emoji:"" },
+      { nome:"Design com henna", dur:"45 min", preco:"25,00", emoji:"" }
     ],
     horarios: ["09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"],
     fechado: [0],                    // dias fechados (0=Dom ... 6=Sáb)
@@ -364,6 +364,12 @@
     renderServicos();
   }
 
+  /* Detecta se o valor do ícone é uma imagem (link/caminho) ou um emoji */
+  function ehImagem(v){
+    v = (v || "").trim();
+    return /^(https?:|data:image|\.?\/|img\/)/i.test(v) || /\.(png|jpe?g|svg|webp|gif|avif)(\?.*)?$/i.test(v);
+  }
+
   /* ===================== RENDER DOS SERVIÇOS ===================== */
   function renderServicos(){
     const lista = document.getElementById("lista");
@@ -394,7 +400,12 @@
       div.onclick = function(){ selecionar(this); };
 
       const radio = document.createElement("div"); radio.className = "radio";
-      const thumb = document.createElement("div"); thumb.className = "thumb"; thumb.textContent = s.emoji || "💠";
+      const thumb = document.createElement("div"); thumb.className = "thumb";
+      const ic = (s.emoji || "").trim();
+      const im = document.createElement("img");
+      im.src = ehImagem(ic) ? ic : "img/sobrancelha.svg";   // padrão do estúdio: sobrancelha
+      im.alt = s.nome || ""; im.loading = "lazy";
+      thumb.appendChild(im);
       const info  = document.createElement("div"); info.className = "info";
       const t  = document.createElement("div"); t.className  = "titulo"; t.textContent = s.nome;
       const p  = document.createElement("div"); p.className  = "prof";   p.textContent = cfg.profissional || "";
